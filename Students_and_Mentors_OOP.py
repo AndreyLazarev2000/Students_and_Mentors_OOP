@@ -88,6 +88,7 @@ student1.finished_courses += ['Введение в программирован�
 
 student2 = Student('Дося', 'Пельменова', 'female')
 student2.courses_in_progress += ['Python', 'Git']
+student2.finished_courses += ['Введение в программирование']
 
 lecturer1 = Lecturer('Бобр', 'Курвович')
 lecturer1.courses_attached += ['Python']
@@ -113,29 +114,11 @@ student2.rate_lecture(lecturer1, 'Python', 9)
 print(reviewer1)
 print(lecturer1)
 print(student1)
+print(student2)
 
 # Сравниваем студентов
-# print(student1 > student2)
 if student1 > student2:
     print(f'У {student1.name} {student1.surname} средняя оценка выше, чем у {student2.name} {student2.surname}')
 else:
     print(f'У {student1.name} {student1.surname} средняя оценка не выше, чем у {student2.name} {student2.surname}')
 
-# Функции для подсчета средних оценок
-def calculate_avg_hw_grade(students, course):
-    grades = []
-    for student in students:
-        if course in student.grades:
-            grades.extend(student.grades[course])
-    return round(sum(grades) / len(grades), 1) if grades else 0
-
-def calculate_avg_lecture_grade(lecturers, course):
-    grades = []
-    for lecturer in lecturers:
-        if course in lecturer.grades:
-            grades.extend(lecturer.grades[course])
-    return round(sum(grades) / len(grades), 1) if grades else 0
-
-# Пример использования функций
-print(calculate_avg_hw_grade([student1, student2], 'Python'))
-print(calculate_avg_lecture_grade([lecturer1, lecturer2], 'Python'))
