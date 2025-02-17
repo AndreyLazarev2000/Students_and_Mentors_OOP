@@ -12,9 +12,11 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
+
     def __str__(self):
         avg_grade = self._calculate_avg_grade()
-        return super().__str__() + f"\nСредняя оценка за лекции: {avg_grade}"
+        courses_attached = ', '.join(self.courses_attached) if self.courses_attached else "Нет прикрепленных курсов"
+        return super().__str__() + f"\nСредняя оценка за лекции: {avg_grade}\nПрикрепленные курсы: {courses_attached}"
 
     def _calculate_avg_grade(self):
         if not self.grades:
@@ -62,7 +64,7 @@ class Student:
     def __str__(self):
         avg_grade = self._calculate_avg_grade()
         courses_in_progress = ', '.join(self.courses_in_progress)
-        finished_courses = ', '.join(self.finished_courses)
+        finished_courses = ', '.join(self.finished_courses) if self.finished_courses else "Нет завершенных курсов"
         return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {avg_grade}\nКурсы в процессе изучения: {courses_in_progress}\nЗавершенные курсы: {finished_courses}"
 
     def _calculate_avg_grade(self):
@@ -88,7 +90,7 @@ student1.finished_courses += ['Введение в программирован�
 
 student2 = Student('Дося', 'Пельменова', 'female')
 student2.courses_in_progress += ['Python', 'Git']
-student2.finished_courses += ['Введение в программирование']
+
 
 lecturer1 = Lecturer('Бобр', 'Курвович')
 lecturer1.courses_attached += ['Python']
@@ -110,15 +112,26 @@ reviewer1.rate_hw(student2, 'Python', 8)
 student1.rate_lecture(lecturer1, 'Python', 10)
 student2.rate_lecture(lecturer1, 'Python', 9)
 
+student1.rate_lecture(lecturer2, 'Git', 10)
+student2.rate_lecture(lecturer2, 'Git', 8)
+
 # Выводим информацию
+print("Эксперты:")
 print(reviewer1)
+print(reviewer2)
+print("\n")
+print("Лекторы:")
 print(lecturer1)
+print(lecturer2)
+print("\n")
+print("Студенты:")
 print(student1)
+print("\n")
 print(student2)
+print("\n")
 
 # Сравниваем студентов
 if student1 > student2:
-    print(f'У {student1.name} {student1.surname} средняя оценка выше, чем у {student2.name} {student2.surname}')
+    print(f'У {student1.name} {student1.surname} средняя оценка ({student1._calculate_avg_grade()}) выше, чем у {student2.name} {student2.surname} ({student2._calculate_avg_grade()})')
 else:
-    print(f'У {student1.name} {student1.surname} средняя оценка не выше, чем у {student2.name} {student2.surname}')
-
+    print(f'У {student1.name} {student1.surname} средняя оценка ({student1._calculate_avg_grade()}) не выше, чем у {student2.name} {student2.surname} ({student2._calculate_avg_grade()})')
