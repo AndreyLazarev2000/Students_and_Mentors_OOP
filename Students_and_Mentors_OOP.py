@@ -12,7 +12,6 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
-
     def __str__(self):
         avg_grade = self._calculate_avg_grade()
         courses_attached = ', '.join(self.courses_attached) if self.courses_attached else "Нет прикрепленных курсов"
@@ -24,9 +23,7 @@ class Lecturer(Mentor):
         all_grades = [grade for grades in self.grades.values() for grade in grades]
         return round(sum(all_grades) / len(all_grades), 1)
 
-
-
-class Reviewer(Mentor):  # Эксперты наследуют от Mentor
+class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
 
@@ -52,8 +49,7 @@ class Student:
         self.grades = {}
 
     def rate_lecture(self, lecturer, course, grade):
-        if isinstance(lecturer,
-                      Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
+        if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
             if course in lecturer.grades:
                 lecturer.grades[course] += [grade]
             else:
@@ -83,6 +79,22 @@ class Student:
             return NotImplemented
         return self._calculate_avg_grade() == other._calculate_avg_grade()
 
+# Функция для подсчета средней оценки за домашние задания по курсу
+def calculate_avg_hw_grade(students, course):
+    grades = []
+    for student in students:
+        if course in student.grades:
+            grades.extend(student.grades[course])
+    return round(sum(grades) / len(grades), 1) if grades else 0
+
+# Функция для подсчета средней оценки за лекции по курсу
+def calculate_avg_lecture_grade(lecturers, course):
+    grades = []
+    for lecturer in lecturers:
+        if course in lecturer.grades:
+            grades.extend(lecturer.grades[course])
+    return round(sum(grades) / len(grades), 1) if grades else 0
+
 # Создаем экземпляры
 student1 = Student('Баклан', 'Бакланов', 'male')
 student1.courses_in_progress += ['Python']
@@ -90,7 +102,6 @@ student1.finished_courses += ['Введение в программирован�
 
 student2 = Student('Дося', 'Пельменова', 'female')
 student2.courses_in_progress += ['Python', 'Git']
-
 
 lecturer1 = Lecturer('Бобр', 'Курвович')
 lecturer1.courses_attached += ['Python']
@@ -135,3 +146,13 @@ if student1 > student2:
     print(f'У {student1.name} {student1.surname} средняя оценка ({student1._calculate_avg_grade()}) выше, чем у {student2.name} {student2.surname} ({student2._calculate_avg_grade()})')
 else:
     print(f'У {student1.name} {student1.surname} средняя оценка ({student1._calculate_avg_grade()}) не выше, чем у {student2.name} {student2.surname} ({student2._calculate_avg_grade()})')
+
+# Подсчет средней оценки за домашние задания по курсу Python
+students = [student1, student2]
+avg_hw_grade_course = calculate_avg_hw_grade(students, 'Python')
+print(f"\nСредняя оценка за домашние задания всех студентов по курсу Python: {avg_hw_grade_course}")
+
+# Подсчет средней оценки за лекции по курсу Python
+lecturers = [lecturer1, lecturer2]
+avg_lecture_grade_course = calculate_avg_lecture_grade(lecturers, 'Python')
+print(f"Средняя оценка за лекции всех лекторов по курсу Python: {avg_lecture_grade_course}")
